@@ -19,7 +19,6 @@ The project is inspired by real-world retail operations (e.g., Nike), where metr
 
 ### Traffic
 - **Store Footfall:** Number of customers entering the store daily.
-- **Online Sessions:** Number of visits to the online store.
 
 ### Sales
 - **Store Sales (£)**
@@ -29,7 +28,7 @@ The project is inspired by real-world retail operations (e.g., Nike), where metr
 
 ### Conversion
 - **Store Conversion Rate:** Purchases ÷ Footfall
-- **Online Conversion Rate:** Orders ÷ Sessions
+- **Online Conversion Rate:** Orders ÷ Footfall
 
 ### Returns
 - **Number of Returns (Store & Online)**
