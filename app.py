@@ -13,6 +13,20 @@ st.set_page_config(
     layout="wide",
 )
 
+st.markdown(
+    """
+    <style>
+    .block-container {
+        max-width: 1200px;
+        padding-top: 2rem;
+        padding-bottom: 2rem;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
+
+
 # ---------------------------------------------------------------------------
 # Data Loading
 @st.cache_data
@@ -89,23 +103,23 @@ kpis = calculate_kpi(df_filtered)
 st.title("Retail KPI Dashboard (Store + Online)")
 st.markdown(f"**Data Period:** {start_date} to {end_date}")
 
-left, right = st.columns([3, 2], gap="large")
+left, right = st.columns([3, 2], gap="medium")
 
 # KPI display
 with left.container(border=True):
     st.markdown(f"### Executive Summary ({df['date'].dt.year.max()})")
 
     r1c1, r1c2, r1c3 = st.columns(3)
-    r1c1.metric("Footfall", f"{kpis['Footfall']:,}")
-    r1c2.metric("Purchases", f"{kpis['Purchases']:,}")
-    r1c3.metric("Returns", f"{kpis['Returns']:,}")
+    r1c1.metric("Total Footfall", f"{kpis['Footfall']:,}")
+    r1c2.metric("Total Purchases", f"{kpis['Purchases']:,}")
+    r1c3.metric("Total Returns", f"{kpis['Returns']:,}")
 
     r2c1, r2c2 = st.columns(2)
-    r2c1.metric("Sales", f"£{kpis['Sales']:,}")
-    r2c2.metric("Returns Value", f"£{kpis['Returns Value']:,}")
+    r2c1.metric("Total Sales", f"£{kpis['Sales']:,}")
+    r2c2.metric("Total Returns Value", f"£{kpis['Returns Value']:,}")
 
     r3c1, r3c2 = st.columns(2)
-    r3c1.metric("Revenue", f"£{kpis['Revenue']:,}")
+    r3c1.metric("Total Revenue", f"£{kpis['Revenue']:,}")
     r3c2.metric("Conversion Rate", f"{kpis['Conversion Rate']:.2f}%")
 
 # ---------------------------------------------------------------------------
@@ -137,31 +151,31 @@ def pct_change(current, previous):
     return ((current - previous) / previous) * 100
 
 with right.container(border=True):
-    st.markdown(f"### Weekly Performance")
+    st.markdown("### Weekly Performance")
     st.caption(f"Week {current_week} vs Week {last_week}")
 
-    st.metric(
+    w1, w2 = st.columns(2)
+    w1.metric(
         "Revenue",
         f"£{this_week_kpis['Revenue']:,}",
         f"{pct_change(this_week_kpis['Revenue'], last_week_kpis['Revenue']):.1f}%"
         if last_week_kpis['Revenue'] else "N/A"
     )
-
-    st.metric(
+    w2.metric(
         "Purchases",
         f"{this_week_kpis['Purchases']:,}",
         f"{pct_change(this_week_kpis['Purchases'], last_week_kpis['Purchases']):.1f}%"
         if last_week_kpis['Purchases'] else "N/A"
     )
 
-    st.metric(
+    w3, w4 = st.columns(2)
+    w3.metric(
         "Footfall",
         f"{this_week_kpis['Footfall']:,}",
         f"{pct_change(this_week_kpis['Footfall'], last_week_kpis['Footfall']):.1f}%"
         if last_week_kpis['Footfall'] else "N/A"
     )
-
-    st.metric(
+    w4.metric(
         "Conversion Rate",
         f"{this_week_kpis['Conversion Rate']:.2f}%",
         f"{pct_change(this_week_kpis['Conversion Rate'], last_week_kpis['Conversion Rate']):.1f}%"
@@ -203,6 +217,10 @@ daily['Conversion Rate'] = daily['purchases'] / daily['footfall_or_sessions'] * 
 fig_sales = px.line(daily, x='date', y='sales_value', title='Daily Sales (£)')
 fig_conv = px.line(daily, x='date', y='Conversion Rate', title='Daily Conversion Rate (%)')
 
-st.plotly_chart(fig_sales)
-st.plotly_chart(fig_conv)
+c1, c2 = st.columns(2)
 
+with c1:
+    st.plotly_chart(fig_sales, use_container_width=True)
+
+with c2:
+    st.plotly_chart(fig_conv, use_container_width=True)
