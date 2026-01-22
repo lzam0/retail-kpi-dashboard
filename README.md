@@ -9,7 +9,7 @@ The project is inspired by real-world retail operations (e.g., Nike), where metr
 
 ## Objectives
 - Track key performance indicators (KPIs) for **store and online sales**.
-- Compare **daily and weekly trends** across channels.
+- Compare **daily, weekly, monthly and even yearly trends** across channels.
 - Identify bottlenecks and opportunities in **conversion and sales**.
 - Generate actionable insights for management decisions.
 
